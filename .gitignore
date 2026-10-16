@@ -1,0 +1,15 @@
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Editores
+.vscode/
+.idea/
+*.swp
+
+# Dependencias y salidas locales de pruebas
+node_modules/
+tools/out/
+lighthouse-*.html
+lighthouse-*.json
+*.log
