@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Thanks, we got your request | CSD Good Services</title>
+  <!-- noindex: ver README (config.noindex) -->
+  <meta name="robots" content="noindex, follow">
+  <meta name="theme-color" content="#0A0A0A">
+  <link rel="alternate" hreflang="en-US" href="./">
+  <link rel="alternate" hreflang="es-US" href="../es/gracias/">
+  <link rel="alternate" hreflang="x-default" href="./">
+  <!-- [PENDIENTE] favicon provisorio ("C" cian sobre negro) hasta tener el isotipo oficial -->
+  <link rel="icon" href="../assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Inter sin bloquear el render: la fuente de respaldo tiene métricas ajustadas para evitar saltos (CLS). -->
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&amp;display=swap"></noscript>
+  <link rel="stylesheet" href="../assets/css/styles.css">
+  <script type="module" src="../assets/js/main.js"></script>
+</head>
+<body data-root="../">
+  <!-- GTM <noscript>: opcional. Si se configura gtmId, pegar aquí el iframe oficial con el mismo ID (ver README). -->
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a class="brand" href="../" aria-label="CSD Good Services">
+        <!-- [PENDIENTE] logo oficial: copiar el archivo del cliente en assets/img/logo-csd.svg (no recrear) -->
+        <img src="../assets/img/logo-csd.svg" alt="CSD Good Services" width="148" height="44" onerror="this.parentNode.classList.add('is-missing')">
+        <span class="brand__fallback" aria-hidden="true">CSD Good Services</span>
+      </a>
+      <nav class="header-actions" aria-label="Header">
+        <a class="lang-switch" href="../es/gracias/" hreflang="es-US" lang="es-US" data-lang-switch="es">Español</a>
+        <a class="header-phone" data-tel data-tel-aria="Call" data-call-location="header" hidden>
+          <svg class="icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>
+          <span data-tel-text></span>
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="simple" aria-labelledby="page-title">
+      <div class="container">
+        <div class="simple__inner">
+          <span class="check-badge" aria-hidden="true"><svg class="icon" viewBox="0 0 24 24"><path d="M5 12.5 10 17 19 7"/></svg></span>
+          <h1 id="page-title" class="h1">Thanks, we got your request</h1>
+          <p class="lead">Someone from our team will call you the same business day at the number you gave us. If you sent it after business hours, we'll call you the next business day.</p>
+          <!-- [PENDIENTE] confirmar que el workflow de GoHighLevel envía el email de confirmación -->
+          <p class="lead">We've also sent a confirmation to your email.</p>
+          <a class="btn btn--primary" data-tel data-call-location="thank_you" hidden>Call us now</a>
+          <div class="card crosssell">
+            <a class="crosssell-link" data-crosssell="wrap" target="_blank" rel="noopener">Planning a paint job? CSD also provides interior and exterior commercial painting. <span class="inline-link" data-crosssell-arrow aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer__grid">
+        <div>
+          <a class="brand" href="../" aria-label="CSD Good Services">
+            <img src="../assets/img/logo-csd.svg" alt="CSD Good Services" width="148" height="44" loading="lazy" onerror="this.parentNode.classList.add('is-missing')">
+            <span class="brand__fallback" aria-hidden="true">CSD Good Services</span>
+          </a>
+          <p class="footer__name" data-cfg="legalName" hidden></p>
+        </div>
+        <div class="footer__stack">
+          <p class="dot-list" data-dot-list>
+            <span data-cfg="address" hidden></span>
+            <a data-tel data-call-location="footer" hidden><span data-tel-text></span></a>
+            <span data-cfg="email" hidden><a></a></span>
+          </p>
+          <p data-cfg="hours" hidden>Hours: <span data-value></span></p>
+        </div>
+        <div>
+          <a class="lang-switch" href="../es/gracias/" hreflang="es-US" lang="es-US" data-lang-switch="es">Español</a>
+        </div>
+      </div>
+      <div class="footer__bottom">
+        <nav class="footer__links" aria-label="Legal">
+          <a href="../privacy/">Privacy Policy</a>
+          <a href="../terms/">Terms of Service</a>
+        </nav>
+        <p>© <span data-year>2026</span> <span data-copyright-name>CSD Good Services</span></p>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

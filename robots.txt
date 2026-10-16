@@ -1,0 +1,4 @@
+# No se bloquea nada: Google Ads necesita rastrear la landing.
+# La landing no se indexa por el <meta name="robots" content="noindex, follow"> de cada página.
+User-agent: *
+Allow: /
