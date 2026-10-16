@@ -13,7 +13,7 @@ const ROOT = fileURLToPath(new URL("..", import.meta.url));
 const PORT = 4795;
 const BASE = "/csd-landing-cleaning/";
 const URL0 = `http://localhost:${PORT}${BASE}`;
-const KNOWN_MISSING = [/logo-csd\.svg$/]; // [PENDIENTE] logo oficial
+const KNOWN_MISSING = []; // recursos que se aceptan ausentes (ninguno)
 
 let pass = 0, fail = 0;
 const ok = (cond, label, extra = "") => {
@@ -101,7 +101,14 @@ console.log("\n2. Subruta " + BASE);
     if (!h.startsWith(URL0)) broken.push("fuera de la subruta: " + h);
   }
   ok(!broken.length, `${internal.length} links internos sin errores`, broken.join("\n"));
-  ok(!log.failed.length, "recursos cargados sin 4xx/5xx (salvo logo pendiente)", log.failed.join("\n"));
+  ok(!log.failed.length, "recursos cargados sin 4xx/5xx", log.failed.join("\n"));
+  for (const p of pages) {
+    await page.goto(URL0 + p, { waitUntil: "networkidle" });
+    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" })); // el logo del pie es lazy
+    await page.waitForLoadState("networkidle");
+    const logos = await page.$$eval(".brand img", (imgs) => imgs.map((i) => ({ ok: i.complete && i.naturalWidth > 0, w: Math.round(i.getBoundingClientRect().width), missing: i.parentNode.classList.contains("is-missing") })));
+    ok(logos.length === 2 && logos.every((l) => l.ok && !l.missing && l.w >= 120), `${p || "/"} logo oficial cargado en header y pie (≥ 120 px)`, JSON.stringify(logos));
+  }
   await ctx.close();
 }
 

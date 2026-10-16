@@ -75,9 +75,11 @@ El botón primario usa **blanco, 19 px mínimo, peso 700, mayúsculas, tracking 
 
 ### Logo
 
-- Usar **solo el archivo oficial** en `assets/img/logo-csd.svg` (o PNG de máxima resolución). **No recrearlo, no redibujarlo, no reescribir "CSD" ni "GOOD SERVICES LLC" con otra fuente.**
+- Usar **solo el archivo oficial**: `assets/img/logo-csd.png` (PNG transparente provisto por el cliente, recortado solo en su margen transparente). Si llega un SVG o un PNG de mayor resolución, reemplazarlo manteniendo la proporción. **No recrearlo, no redibujarlo, no reescribir "CSD" ni "GOOD SERVICES LLC" con otra fuente.**
 - Ancho mínimo 120 px. Área de resguardo = altura de la "D" del monograma. Sin sombras, biseles ni trazos. Siempre sobre `#0A0A0A`.
-- Mientras falte, el `<img>` muestra un texto de respaldo neutro (`.brand__fallback`). Es provisorio.
+- Tamaño en pantalla: 120 px en móvil y 132 px en escritorio (el archivo tiene 266 px reales; más grande se vería borroso en pantallas 2×).
+- El encabezado es sólido `#0A0A0A` y mide 68 px en móvil / 84 px en escritorio para que el logo respire (el brief pedía 60 px en móvil; se subió por el logo).
+- Si el archivo no cargara, el `<img>` muestra un texto de respaldo neutro (`.brand__fallback`).
 
 ### Sistema visual
 

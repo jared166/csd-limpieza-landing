@@ -26,11 +26,11 @@
   --container: 1200px;
   --gutter: clamp(20px, 5vw, 40px);
   --section: clamp(64px, 9vw, 128px);
-  --header-h: 60px;
+  --header-h: 68px; /* el brief pedía 60 px; se sube para que el logo (≥ 120 px de ancho) tenga aire */
   --ease: cubic-bezier(.2, .7, .2, 1);
 }
 
-@media (min-width: 900px) { :root { --header-h: 76px; } }
+@media (min-width: 900px) { :root { --header-h: 84px; } }
 
 /* Respaldo de Inter con métricas equivalentes (evita saltos de layout al cargar la fuente) */
 @font-face {
@@ -164,23 +164,22 @@ button, input, select, textarea { font: inherit; color: inherit; }
 .site-header {
   position: fixed; inset: 0 0 auto 0; z-index: 50;
   height: var(--header-h);
-  background: rgba(10, 10, 10, .94);
+  background: var(--csd-bg); /* sólido: el logo va siempre sobre #0A0A0A (manual) */
   border-bottom: 1px solid transparent;
   transition: border-color .3s var(--ease), background-color .3s var(--ease);
 }
 .site-header.is-scrolled { border-bottom-color: var(--csd-border); }
-@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
-  .site-header { background: rgba(10, 10, 10, .7); -webkit-backdrop-filter: saturate(140%) blur(14px); backdrop-filter: saturate(140%) blur(14px); }
-  .site-header.is-scrolled { background: rgba(10, 10, 10, .86); }
-}
+
 .site-header__inner { height: 100%; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .header-actions { display: flex; align-items: center; gap: 8px; }
 @media (min-width: 900px) { .header-actions { gap: 14px; } }
 
 /* Logo oficial: sin sombras, biseles ni trazos; siempre sobre #0A0A0A. */
-.brand { display: inline-flex; align-items: center; min-height: 44px; padding: 6px 0; text-decoration: none; background: var(--csd-bg); }
+.brand { display: inline-flex; align-items: center; min-height: 44px; padding: 0; text-decoration: none; }
+/* Logo oficial (PNG transparente, 266×119 px reales): 120 px en móvil (mínimo del
+   manual) y 132 px en escritorio para que se vea nítido en pantallas 2×. */
 .brand img { width: 120px; height: auto; }
-@media (min-width: 900px) { .brand img { width: 148px; } }
+@media (min-width: 900px) { .brand img { width: 132px; } }
 .brand__fallback { display: none; font-weight: 600; font-size: 14px; letter-spacing: 1.5px; text-transform: uppercase; white-space: nowrap; }
 @media (max-width: 380px) { .brand__fallback { letter-spacing: .5px; } }
 .brand.is-missing img { display: none; }
