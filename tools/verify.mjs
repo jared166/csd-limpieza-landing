@@ -113,7 +113,7 @@ console.log("\n2. Subruta " + BASE);
 }
 
 /* ── 3. Formulario ──────────────────────────────────────────────────────── */
-const TEST_QS = "?gclid=TEST123&utm_source=google&utm_campaign=cleaning&h=janitorial";
+const TEST_QS = "?gclid=TEST123&utm_source=google&utm_campaign=cleaning&h=office";
 console.log("\n3a. Comercial recurrente");
 {
   const { ctx, page, log } = await newPage({ config: { gtmId: "" } });
@@ -129,13 +129,13 @@ console.log("\n3a. Comercial recurrente");
   ok(p.cleaning_type === "recurring" && p.frequency === "weekly", "cleaning_type recurring + frequency weekly");
   ok(JSON.stringify(p.areas) === '["floors","windows"]', 'areas ["floors","windows"]');
   ok(p.phone_e164 === "+13055550123" && p.phone === "(305) 555-0123", "phone (305) 555-0123 + phone_e164");
-  ok(p.lead_type === "commercial" && p.headline_variant === "janitorial", "lead_type commercial + headline_variant janitorial");
+  ok(p.lead_type === "commercial" && p.headline_variant === "office", "lead_type commercial + headline_variant office");
   ok(p.gclid === "TEST123" && p.utm_source === "google" && p.utm_campaign === "cleaning", "gclid y UTM en el payload");
   ok(p.service_line === "cleaning" && p.language === "en" && p.submitted_at && p.page_url && p.user_agent && p.landing_page !== undefined, "service_line, language, page_url, submitted_at, user_agent, landing_page");
   const gl = log.events.find((e) => e.event === "generate_lead");
   ok(gl && gl.user_data && gl.user_data.phone_number === "+13055550123" && gl.user_data.email && gl.cleaning_type === "recurring", "generate_lead con user_data y cleaning_type");
   ok(log.events.some((e) => e.event === "form_start"), "form_start registrado");
-  ok(page.url().includes("thank-you/?gclid=TEST123&utm_source=google&utm_campaign=cleaning&h=janitorial"), "redirige a thank-you/ conservando el query string");
+  ok(page.url().includes("thank-you/?gclid=TEST123&utm_source=google&utm_campaign=cleaning&h=office"), "redirige a thank-you/ conservando el query string");
   ok(!log.errors.length, "sin errores en consola", log.errors.join("\n"));
   await ctx.close();
 }
@@ -259,11 +259,11 @@ console.log("\n5. Titulares por grupo de anuncios");
 {
   const { ctx, page } = await newPage();
   const expect = {
-    "": { _: "Commercial Cleaning in Miami, by Our Own Crew", office: "Office Cleaning in Miami, by Our Own Crew", janitorial: "Janitorial Services in Miami, by Our Own Crew", window: "Commercial Window Cleaning in Miami, by Our Own Crew", floor: "Commercial Floor Cleaning in Miami, by Our Own Crew" },
-    "es/": { _: "Limpieza comercial en Miami, a cargo de nuestro propio equipo", office: "Limpieza de oficinas en Miami, a cargo de nuestro propio equipo", janitorial: "Limpieza recurrente para negocios en Miami, a cargo de nuestro propio equipo", window: "Limpieza de vidrios para negocios en Miami, a cargo de nuestro propio equipo", floor: "Limpieza de pisos para negocios en Miami, a cargo de nuestro propio equipo" }
+    "": { _: "Commercial Cleaning in Miami, by Our Own Crew", office: "Office Cleaning in Miami, by Our Own Crew", retail: "Retail Store Cleaning in Miami: One Team, One Number to Call", warehouse: "Warehouse Cleaning in Miami, Scoped and Quoted for Your Space", restaurant: "Restaurant Cleaning in Miami, on a Schedule Built Around Your Business", residential: "Residential Cleaning in Miami? Tell Us About Your Space" },
+    "es/": { _: "Limpieza comercial en Miami, a cargo de nuestro propio equipo", office: "Limpieza de oficinas en Miami, a cargo de nuestro propio equipo", retail: "Limpieza de tiendas en Miami: un equipo y un solo número", warehouse: "Limpieza de almacenes en Miami, cotizada a la medida de su espacio", restaurant: "Limpieza de restaurantes en Miami, con un calendario a la medida de su negocio", residential: "¿Limpieza residencial en Miami? Cuéntenos sobre su espacio" }
   };
   for (const [lang, map] of Object.entries(expect)) {
-    for (const k of ["office", "janitorial", "window", "floor"]) {
+    for (const k of ["office", "retail", "warehouse", "restaurant", "residential"]) {
       await page.goto(URL0 + lang + "?h=" + k);
       ok((await page.textContent("h1")).replace(/\u00a0/g, " ") === map[k], `${lang || "en/"} ?h=${k}`);
     }

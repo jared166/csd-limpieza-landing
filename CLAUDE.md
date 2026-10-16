@@ -32,7 +32,7 @@ El texto de las páginas es literal del brief (sección 8). Se pueden ajustar sa
 3. **Sin reseñas, testimonios, estrellas, logos de clientes, contadores, temporizadores ni sellos.** Los bloques opcionales (`config.optionalBlocks`) quedan apagados por defecto y solo se encienden con contenido real.
 4. **Solo fotos reales de trabajos de limpieza comercial de CSD.** Nada de stock presentado como trabajo propio, nada residencial, nada generado por IA. Sin fotos, la galería no se muestra.
 5. **Español:** neutro, con "usted", para el público hispano de Miami. "Cotización" (no "presupuesto" ni "estimado"); "almacenes" (no "bodegas").
-6. **Inglés:** de EE. UU. "Janitorial" solo aparece en el titular de `?h=janitorial`.
+6. **Inglés:** de EE. UU. Los titulares por grupo de anuncios (`?h=office|retail|warehouse|restaurant|residential`) están documentados en `DOCUMENTACION.md` (sección 2.3).
 7. **Formatos:** teléfono (305) 555-0123; tamaños en pies cuadrados (sq ft).
 8. Nada marcado `[PENDIENTE]` se rellena con datos inventados ni aparece como texto en la página pública.
 9. No agregar chat, pop-ups, WhatsApp flotante ni banners promocionales.
