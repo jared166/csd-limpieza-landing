@@ -23,14 +23,21 @@ const only = process.argv[2];
 for (const [name, path] of pages) {
   if (only && !name.startsWith(only)) continue;
   for (const [w, h] of sizes) {
-    const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, reducedMotion: "reduce" });
+    const ctx = await browser.newContext({ viewport: { width: w, height: h }, deviceScaleFactor: 1, reducedMotion: process.env.MOTION === "1" ? "no-preference" : "reduce" });
     const page = await ctx.newPage();
     await page.goto(`http://localhost:${PORT}${BASE}${path}`, { waitUntil: "networkidle" });
     await page.evaluate(() => document.fonts.ready);
+    if (process.env.MOTION === "1") await page.waitForTimeout(3200); // deja terminar la animación del hero
     await page.screenshot({ path: `${OUT}${name}-${w}-fold.png` });
+    // Recorre la página para disparar las apariciones on-scroll antes de la captura completa.
+    await page.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 400) { window.scrollTo({ top: y, behavior: "instant" }); await new Promise((r) => setTimeout(r, 60)); }
+      window.scrollTo({ top: 0, behavior: "instant" });
+    });
+    await page.waitForTimeout(900);
     await page.screenshot({ path: `${OUT}${name}-${w}-full.png`, fullPage: true });
     if (w === 360 && !name.includes("-")) {
-      await page.evaluate(() => window.scrollTo(0, document.querySelector("[data-hero]").offsetHeight + 400));
+      await page.evaluate(() => window.scrollTo({ top: document.querySelector("[data-hero]").offsetHeight + 400, behavior: "instant" }));
       await page.waitForTimeout(500);
       await page.screenshot({ path: `${OUT}${name}-${w}-stickybar.png` });
     }

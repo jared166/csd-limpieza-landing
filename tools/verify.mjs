@@ -258,11 +258,11 @@ console.log("\n5. Titulares por grupo de anuncios");
   for (const [lang, map] of Object.entries(expect)) {
     for (const k of ["office", "janitorial", "window", "floor"]) {
       await page.goto(URL0 + lang + "?h=" + k);
-      ok(await page.textContent("h1") === map[k], `${lang || "en/"} ?h=${k}`);
+      ok((await page.textContent("h1")).replace(/\u00a0/g, " ") === map[k], `${lang || "en/"} ?h=${k}`);
     }
     for (const bad of ["<script>alert(1)</script>", "unknown", "constructor", "__proto__"]) {
       await page.goto(URL0 + lang + "?h=" + encodeURIComponent(bad));
-      ok(await page.textContent("h1") === map._, `${lang || "en/"} ?h=${bad} → H1 por defecto`);
+      ok((await page.textContent("h1")).replace(/\u00a0/g, " ") === map._, `${lang || "en/"} ?h=${bad} → H1 por defecto`);
     }
     ok(await page.$$eval("h1", (h) => h.length) === 1, `${lang || "en/"} un solo h1`);
   }
