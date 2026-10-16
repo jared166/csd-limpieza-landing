@@ -14,7 +14,7 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 
 | Indicador | Resultado |
 | --- | --- |
-| Pruebas automáticas (sección 12 del brief) | **169 de 169 OK** |
+| Pruebas automáticas (sección 12 del brief) | **171 de 171 OK** |
 | Lighthouse móvil · Rendimiento | **99** (EN y ES) |
 | Lighthouse móvil · Accesibilidad | **100** (EN y ES) |
 | Lighthouse móvil · Buenas prácticas | **96** (único aviso: Google Fonts bloqueado por el proxy del entorno de pruebas; no es un error del sitio) |
@@ -54,7 +54,22 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 
 ### 2.3 Funcionalidades clave
 
-- **Titular por grupo de anuncios (`?h=`):** `office`, `janitorial`, `window`, `floor`. Se aplica con un script inline justo después del H1, antes del primer render (sin parpadeo). Lista blanca estricta: nunca se inserta texto de la URL. La clave mostrada viaja como `headline_variant`.
+- **Titular por grupo de anuncios (`?h=`):** se aplica con un script inline justo después del H1, antes del primer render (sin parpadeo). Lista blanca estricta: nunca se inserta texto de la URL. La clave mostrada viaja como `headline_variant` (o `default` si no se aplicó ninguna). Las campañas pagas llegan en inglés; la versión en español es solo respaldo por si el usuario cambia de idioma con el botón. Las 5 variantes se alinean con los tipos de propiedad del formulario:
+
+  | Clave (`?h=`) | H1 en inglés (`index.html`) | H1 en español (`es/index.html`) |
+  | --- | --- | --- |
+  | *(sin clave)* | Commercial Cleaning in Miami, by Our Own Crew | Limpieza comercial en Miami, a cargo de nuestro propio equipo |
+  | `office` | Office Cleaning in Miami, by Our Own Crew | Limpieza de oficinas en Miami, a cargo de nuestro propio equipo |
+  | `retail` | Retail Store Cleaning in Miami: One Team, One Number to Call | Limpieza de tiendas en Miami: un equipo y un solo número |
+  | `warehouse` | Warehouse Cleaning in Miami, Scoped and Quoted for Your Space | Limpieza de almacenes en Miami, cotizada a la medida de su espacio |
+  | `restaurant` | Restaurant Cleaning in Miami, on a Schedule Built Around Your Business | Limpieza de restaurantes en Miami, con un calendario a la medida de su negocio |
+  | `residential` | Residential Cleaning in Miami? Tell Us About Your Space | ¿Limpieza residencial en Miami? Cuéntenos sobre su espacio |
+
+  Cada variante combina la palabra clave del grupo de anuncios (coincidencia con el anuncio) con un diferencial confirmado por el cliente: equipo propio, "one team, one number to call", alcance y cotización a medida, y calendario adaptado al negocio. La variante residencial va en forma de pregunta porque CSD no confirmó que ofrezca limpieza residencial (la FAQ de la página deriva esos casos al teléfono).
+
+  > **Lista blanca del script inline:** `["office","retail","warehouse","restaurant","residential"]` (antes `office`, `janitorial`, `window`, `floor`). Cualquier otra clave muestra el H1 por defecto. Las URLs finales de los anuncios deben usar exactamente estas claves, por ejemplo `https://…/?h=retail`. Si se agrega una variante nueva, hay que sumar el atributo `data-h-<clave>` en los dos HTML **y** la clave en la lista del script de ambos archivos.
+
+  > **Largo de los titulares:** `restaurant` es el más largo (5 líneas en móvil en inglés y 6 en español); entra sin desbordes y el CTA sigue visible en la primera pantalla del móvil, pero es candidato a una versión más corta si se quiere ganar espacio.
 - **Atribución (`attribution.js`):** captura `gclid`, `gbraid`, `wbraid`, `utm_*` y `h`; guarda primer contacto 90 días; un click ID nuevo reemplaza al anterior; agrega `landing_page` y `referrer`. Si el storage está bloqueado: `sessionStorage` → memoria, sin errores.
 - **Cambio de idioma:** conserva query string y hash; sin redirección automática por idioma del navegador; `hreflang` recíprocos; evento `language_switch`.
 - **Formulario (`form.js`):**
@@ -179,14 +194,14 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 | --- | --- |
 | 12.1 Capturas 360/768/1440, EN y ES | Revisadas (hero, modalidades, barra móvil, formulario, pie). Se corrigieron: desborde del formulario a 320–360 px, huérfana "a" en el H1 español, separadores del pie en móvil |
 | 12.2 Subruta | 11 links internos y todos los recursos OK; logo oficial cargado en header y pie de las 8 páginas (≥ 120 px) |
-| 12.3a Comercial recurrente | Frecuencia aparece; payload con `recurring`, `weekly`, `["floors","windows"]`, `phone_e164`, `commercial`, `janitorial`, gclid y UTM; `generate_lead` con `user_data`; redirige a `thank-you/` con el query string |
+| 12.3a Comercial recurrente | Frecuencia aparece; payload con `recurring`, `weekly`, `["floors","windows"]`, `phone_e164`, `commercial`, `headline_variant`, gclid y UTM; `generate_lead` con `user_data`; redirige a `thank-you/` con el query string |
 | 12.3b Comercial puntual | Frecuencia oculta y enviada vacía |
 | 12.3c Residencial | `lead_residential` sin `user_data`; no se dispara `generate_lead` |
 | 12.3d Validación | Errores junto a cada campo, en el idioma correcto, foco al primero (EN y ES) |
 | 12.3e Antispam | Campo trampa y envío < 3 s descartados |
 | 12.3f Falla | Mensaje con teléfono y email a los ~10 s |
 | 12.4 Atribución | gclid persiste de EN a ES sin parámetros; con storage bloqueado, sin errores |
-| 12.5 Titulares | 4 claves × 2 idiomas OK; `<script>`, claves desconocidas, `constructor` y `__proto__` → H1 por defecto |
+| 12.5 Titulares | Variantes `office`, `retail`, `warehouse`, `restaurant` y `residential` × 2 idiomas (ver la tabla de la sección 2.3); `<script>`, claves desconocidas, `constructor` y `__proto__` → H1 por defecto |
 | 12.6 Config vacía | Sin `tel:`, sin galería, sin frecuencias, sin scripts de Google, 4 pasos; sin "[PENDIENTE]/undefined/null" |
 | 12.6b Config completa | Teléfonos, galería + lightbox (Escape devuelve el foco), 5 pasos, GTM, JSON-LD, venta cruzada |
 | 12.7 Palabras prohibidas | Ninguna en HTML/CSS/JS (los nombres de campo `guarantee*` de `config.js` son la única excepción, pedida por el brief) |
@@ -255,3 +270,13 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 - Test A/B de titulares por grupo de anuncios usando `headline_variant` como dimensión en GA4.
 - Valores de conversión diferenciados puntual vs. recurrente en GTM a partir de `cleaning_type`.
 - Bloque de reseñas de Google cuando el perfil tenga reseñas reales (ya está construido y apagado).
+
+---
+
+## 11. Historial de cambios
+
+| Fecha | Cambio | Pull request |
+| --- | --- | --- |
+| 16-10-2026 | Landing EN/ES completa, medición, formulario, atribución y pase premium | jared166/csd-limpieza-landing#1 |
+| 16-10-2026 | Logo oficial del cliente en las 8 páginas, encabezado sólido de 68/84 px y OG regenerada | jared166/csd-limpieza-landing#2 |
+| 16-10-2026 | Titulares `?h=` alineados con los tipos de propiedad del formulario (`office`, `retail`, `warehouse`, `restaurant`, `residential`), lista blanca del script actualizada y pruebas a 171/171 | jared166/csd-limpieza-landing#3 |
