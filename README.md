@@ -33,7 +33,7 @@ Landing de captación para campañas de **Google Ads (búsqueda)** del servicio 
 │   ├── js/form.js              (validación, lógica condicional, envío, plan B)
 │   ├── js/tracking.js          (GTM y dataLayer)
 │   └── img/
-│       ├── logo-csd.svg        [PENDIENTE: archivo oficial del cliente]
+│       ├── logo-csd.png        (oficial del cliente, PNG transparente 266×119; pedir SVG o PNG de mayor resolución)
 │       ├── favicon.svg         (provisorio: "C" cian sobre negro)
 │       ├── og-image.jpg        (EN, 1200×630)
 │       ├── og-image-es.jpg     (ES, 1200×630)
@@ -132,7 +132,7 @@ node tools/og-image.mjs      # regenera og-image(.jpg|-es.jpg); incluye el logo 
 - [ ] **Webhook probado de punta a punta en GoHighLevel** (incluye `gclid`, etiqueta puntual/recurrente y email de confirmación al lead).
 - [ ] **GTM** con la conversión de Google Ads configurada sobre `generate_lead` (conversiones mejoradas con `user_data`).
 - [ ] **Fotos reales** cargadas (o la galería sigue oculta).
-- [ ] **Logo oficial** en `assets/img/logo-csd.svg` (y volver a correr `node tools/og-image.mjs`).
+- [x] **Logo oficial** cargado en `assets/img/logo-csd.png` y OG regenerada. Opcional: pedir versión SVG o PNG de mayor resolución (si llega, reemplazar el archivo y correr `node tools/og-image.mjs`).
 - [ ] Confirmar que **"Ceilings / Techos"** son techos interiores y no limpieza de techos exteriores.
 - [ ] **`noindex`** revisado (por defecto activo).
 - [ ] URLs de **venta cruzada** a la landing de pintura (`crossSellUrl_en/_es`).

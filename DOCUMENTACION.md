@@ -14,10 +14,10 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 
 | Indicador | Resultado |
 | --- | --- |
-| Pruebas automáticas (sección 12 del brief) | **161 de 161 OK** |
+| Pruebas automáticas (sección 12 del brief) | **169 de 169 OK** |
 | Lighthouse móvil · Rendimiento | **99** (EN y ES) |
 | Lighthouse móvil · Accesibilidad | **100** (EN y ES) |
-| Lighthouse móvil · Buenas prácticas | **96** (único aviso: el 404 del logo pendiente) |
+| Lighthouse móvil · Buenas prácticas | **96** (único aviso: Google Fonts bloqueado por el proxy del entorno de pruebas; no es un error del sitio) |
 | Lighthouse móvil · SEO | 54 (esperado: `noindex` activo y `hreflang` relativos hasta tener dominio) |
 | LCP / CLS / TBT (móvil simulado) | 1,6–1,7 s / 0,004 / 0 ms |
 | Peso HTML + CSS + JS por página | 107 KB EN · 108 KB ES (objetivo < 120 KB) |
@@ -39,7 +39,7 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 
 ### 2.2 Secciones de la landing (en orden)
 
-1. **Encabezado fijo:** logo, botón de idioma, teléfono click-to-call (si existe) y "Request a Quote".
+1. **Encabezado fijo** (sólido `#0A0A0A`, 68 px en móvil / 84 px en escritorio): logo oficial, botón de idioma, teléfono click-to-call (si existe) y "Request a Quote".
 2. **Hero:** H1 dinámico por grupo de anuncios, subtítulo, 3 viñetas, CTA y compromiso de devolver la llamada el mismo día hábil. Sin foto: composición abstracta en CSS.
 3. **Two ways to work with us:** tarjetas Puntual / Recurrente (+ línea de frecuencias si se configura).
 4. **What we clean:** pisos, vidrios, paredes, techos, con íconos de línea en cian.
@@ -147,7 +147,7 @@ Refinamientos adicionales: numeración editorial de secciones (01–07, decorati
 | No condicionar animaciones a `prefers-reduced-motion` | Parcial | El brief exige respetarlo: las apariciones, el squeegee y el brillo del hero se desactivan; los hovers (color, borde) se mantienen |
 | Todo en WebP | Parcial | Las imágenes Open Graph quedan en JPG porque WhatsApp, Facebook y LinkedIn no leen WebP de forma confiable. Las fotos de trabajos sí deben ir en WebP/AVIF |
 
-El verificador de la skill (`verify_project.py`) solo reporta esas desviaciones intencionales (módulos, JPG de OG, logo pendiente y ausencia de `lib/`).
+El verificador de la skill (`verify_project.py`) solo reporta esas desviaciones intencionales (módulos, JPG de OG y ausencia de `lib/`).
 
 ---
 
@@ -157,7 +157,7 @@ El verificador de la skill (`verify_project.py`) solo reporta esas desviaciones 
 2. **`noindex` escrito en el HTML** (no solo por JS), porque Google puede decidir sin ejecutar JavaScript. Para indexar hay que borrar la línea en los 8 HTML y poner `noindex: false`.
 3. **CTA del encabezado oculto por debajo de 640 px:** en móvil no entra con el texto en 19 px (exigido por contraste). El CTA del hero y la barra inferior cubren esa función.
 4. **Texto de los botones primarios puede partirse en dos líneas** en pantallas < 480 px (ej. "SOLICITAR COTIZACIÓN" en la barra inferior junto a "Llamar"), en lugar de bajar el tamaño por debajo de 19 px.
-5. **Logo faltante:** el `<img>` apunta a `assets/img/logo-csd.svg`; si no carga, se muestra un texto neutro "CSD Good Services" en Inter (no es una recreación del logo; desaparece al subir el archivo).
+5. **Logo oficial (PNG del cliente):** se recortó solo el margen transparente (la gráfica no se tocó) y se muestra a 120 px en móvil / 132 px en escritorio para que se vea nítido. El encabezado pasó a ser sólido `#0A0A0A` (el manual pide el logo siempre sobre ese color) y subió de 60 a 68 px en móvil (y de 76 a 84 px en escritorio) para darle aire: a 120 px de ancho el logo mide 54 px de alto y no entraba con holgura en 60 px. Si el archivo no cargara, queda un texto neutro de respaldo.
 6. **Copyright sin `legalName`:** muestra "CSD Good Services" (nombre comercial confirmado) para no dejar "© 2026" solo.
 7. **Mensajes de error del formulario y textos de accesibilidad** (no estaban en el brief) escritos de forma neutra, con "usted" en español.
 8. **Mensaje de falla con datos parciales:** si falta teléfono o email, se usa la variante con el dato disponible; si faltan ambos, "Please try again in a few minutes" / "Inténtelo de nuevo en unos minutos".
@@ -178,7 +178,7 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 | Prueba del brief | Resultado |
 | --- | --- |
 | 12.1 Capturas 360/768/1440, EN y ES | Revisadas (hero, modalidades, barra móvil, formulario, pie). Se corrigieron: desborde del formulario a 320–360 px, huérfana "a" en el H1 español, separadores del pie en móvil |
-| 12.2 Subruta | 11 links internos y todos los recursos OK (salvo el logo pendiente) |
+| 12.2 Subruta | 11 links internos y todos los recursos OK; logo oficial cargado en header y pie de las 8 páginas (≥ 120 px) |
 | 12.3a Comercial recurrente | Frecuencia aparece; payload con `recurring`, `weekly`, `["floors","windows"]`, `phone_e164`, `commercial`, `janitorial`, gclid y UTM; `generate_lead` con `user_data`; redirige a `thank-you/` con el query string |
 | 12.3b Comercial puntual | Frecuencia oculta y enviada vacía |
 | 12.3c Residencial | `lead_residential` sin `user_data`; no se dispara `generate_lead` |
@@ -215,7 +215,7 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 
 ### En el contenido y los archivos
 
-- **Logo oficial** → `assets/img/logo-csd.svg` (después, `node tools/og-image.mjs`).
+- ~~Logo oficial~~ → cargado (`assets/img/logo-csd.png`). Opcional: pedir SVG o PNG de mayor resolución.
 - **Isotipo** para reemplazar el favicon provisorio.
 - **Textos legales** (privacidad y términos, EN/ES) revisados por abogado. No lanzar campañas sin esto.
 - **Consentimiento del formulario:** revisión legal; si piden casilla obligatoria, se agrega.
@@ -234,7 +234,7 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 - [ ] Webhook probado de punta a punta en GoHighLevel (gclid, etiqueta puntual/recurrente, email de confirmación).
 - [ ] GTM publicado con la conversión sobre `generate_lead` (y conversiones mejoradas).
 - [ ] Fotos reales cargadas (o galería oculta, que es válido).
-- [ ] Logo oficial + OG regenerada.
+- [x] Logo oficial + OG regenerada.
 - [ ] "Ceilings / Techos" confirmado.
 - [ ] `noindex` revisado.
 - [ ] `node tools/verify.mjs` en 0 fallas con la configuración real.
