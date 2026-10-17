@@ -36,7 +36,8 @@ Landing de captación para campañas de **Google Ads (búsqueda)** del servicio 
 │   ├── js/tracking.js          (GTM y dataLayer)
 │   └── img/
 │       ├── logo-csd.png        (oficial del cliente, PNG transparente 266×119; pedir SVG o PNG de mayor resolución)
-│       ├── favicon.svg         (provisorio: "C" cian sobre negro)
+│       ├── favicon-32.png      (monograma CSD del logo oficial sobre #0A0A0A)
+│       ├── apple-touch-icon.png (180 px, mismo origen)
 │       ├── og-image.jpg        (EN, 1200×630)
 │       ├── og-image-es.jpg     (ES, 1200×630)
 │       └── work/               (fotos reales de trabajos)
@@ -72,7 +73,8 @@ Con `webhookUrl` vacío, el formulario no envía nada: muestra el payload con `c
 | Campo | Para qué | Si está vacío |
 | --- | --- | --- |
 | `legalName` | Pie, © y JSON-LD | Se oculta; el © usa "CSD Good Services" |
-| `phone` / `phoneE164` | Click-to-call en header, barra móvil, FAQ, pie, gracias, error | No aparece ningún `tel:` |
+| `phone` / `phoneE164` | Teléfono principal: click-to-call en header, barra móvil, FAQ, pie, gracias, error | No aparece ningún `tel:` |
+| `phone2` / `phone2E164` | Teléfono secundario: solo en el pie | No se muestra |
 | `email`, `address`, `hours_en/_es` | Pie y mensaje de error | Se ocultan |
 | `webhookUrl` / `webhookMode` | Envío a GoHighLevel | Modo desarrollo |
 | `gtmId` | Contenedor GTM (`GTM-XXXXXXX`) | No se carga ningún script de Google |
@@ -128,15 +130,13 @@ node tools/og-image.mjs      # regenera og-image(.jpg|-es.jpg); incluye el logo 
 
 ## Checklist de lanzamiento (bloqueantes)
 
-- [ ] **Datos legales y de contacto** en `config.js`: `legalName` exacto, `phone`, `phoneE164`, `email`, `address`.
-- [ ] **Horario real** (`hours_en`, `hours_es`).
-- [x] **Textos legales cargados** en `privacy/`, `terms/`, `es/privacidad/`, `es/terminos/` (provistos por el cliente el 17-10-2026). Pendiente: confirmar revisión de abogado y alinear el consentimiento del formulario si se enviarán SMS.
-- [ ] **Webhook probado de punta a punta en GoHighLevel** (incluye `gclid`, etiqueta puntual/recurrente y email de confirmación al lead).
-- [ ] **GTM** con la conversión de Google Ads configurada sobre `generate_lead` (conversiones mejoradas con `user_data`).
-- [ ] **Fotos reales** cargadas (o la galería sigue oculta).
-- [x] **Logo oficial** cargado en `assets/img/logo-csd.png` y OG regenerada. Opcional: pedir versión SVG o PNG de mayor resolución (si llega, reemplazar el archivo y correr `node tools/og-image.mjs`).
-- [ ] Confirmar que **"Ceilings / Techos"** son techos interiores y no limpieza de techos exteriores.
-- [ ] **`noindex`** revisado (por defecto activo).
-- [ ] URLs de **venta cruzada** a la landing de pintura (`crossSellUrl_en/_es`).
-- [ ] Dominio final: convertir `hreflang` y `og:image` a URLs absolutas (hoy son relativas).
-- [ ] Isotipo oficial para el **favicon** (el actual es provisorio).
+- [x] **Datos legales y de contacto** en `config.js`: CSD Good Services LLC, (786) 295-7057 (principal), (863) 488-6716 (pie), admin@csdgoodservices.com, 8215 NW 64th Street, Medley, FL 33166.
+- [x] **Textos legales del cliente** en `privacy/`, `terms/`, `es/privacidad/`, `es/terminos/`.
+- [x] **Consentimiento** con mensajes de texto (solo notificaciones, no marketing; STOP para dejar de recibirlos).
+- [x] **Logo oficial**, favicon derivado del logo y OG con el logo.
+- [x] **URLs absolutas** (`canonical`, `hreflang`, `og:image`) con el dominio publicado.
+- [x] **`noindex`** revisado: se mantiene a propósito.
+- [x] **"Ceilings / Techos"** según el brief aprobado.
+- [ ] **Integración GoHighLevel:** pegar `webhookUrl` y probar un lead de punta a punta (gclid, etiqueta puntual/recurrente, email de confirmación).
+- [ ] **Integración GTM:** pegar `gtmId` y publicar la conversión de Google Ads sobre `generate_lead` (conversiones mejoradas con `user_data`).
+- Opcionales: horario (`hours_en/_es`), fotos reales, frecuencias, paso de visita y link a la landing de pintura.

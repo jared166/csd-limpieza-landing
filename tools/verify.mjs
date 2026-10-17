@@ -279,8 +279,10 @@ console.log("\n5. Titulares por grupo de anuncios");
 /* ── 6. Configuración vacía / completa ─────────────────────────────────── */
 console.log("\n6. Configuración vacía");
 const ALL = ["", "es/", "thank-you/", "es/gracias/", "privacy/", "terms/", "es/privacidad/", "es/terminos/"];
+// Simula un config.js sin datos de contacto (la interfaz debe degradarse sin rastros).
+const EMPTY = { legalName: "", phone: "", phoneE164: "", phone2: "", phone2E164: "", email: "", address: "", hours_en: "", hours_es: "" };
 {
-  const { ctx, page, log } = await newPage();
+  const { ctx, page, log } = await newPage({ config: EMPTY });
   for (const p of ALL) {
     await page.goto(URL0 + p, { waitUntil: "networkidle" });
     const html = await page.evaluate(() => document.documentElement.outerHTML.replace(/<!--[\s\S]*?-->/g, ""));
@@ -326,6 +328,33 @@ console.log("\n6b. Configuración completa");
 }
 
 /* ── 7. Copy y reglas ───────────────────────────────────────────────────── */
+console.log("\n6c. Configuración real del cliente (config.js)");
+{
+  const { ctx, page, log } = await newPage();
+  for (const [p, lang] of [["", "en"], ["es/", "es"]]) {
+    await page.goto(URL0 + p, { waitUntil: "networkidle" });
+    const f = await page.evaluate(() => {
+      const foot = document.querySelector(".site-footer");
+      return {
+        text: foot.innerText,
+        tels: [...foot.querySelectorAll("a[href^='tel:']")].map((a) => a.getAttribute("href")),
+        mail: (foot.querySelector("a[href^='mailto:']") || {}).href || "",
+        header: (document.querySelector(".site-header a[href^='tel:']") || {}).href || "",
+        consent: document.querySelector(".consent").innerText,
+        ld: [...document.querySelectorAll("script[type='application/ld+json']")].some((x) => x.textContent.includes("LocalBusiness") && x.textContent.includes("+17862957057"))
+      };
+    });
+    ok(f.text.includes("CSD Good Services LLC") && f.text.includes("8215 NW 64th Street, Medley, FL 33166"), `${lang}: pie con nombre legal y dirección`);
+    ok(JSON.stringify(f.tels) === '["tel:+17862957057","tel:+18634886716"]' && f.text.includes("(786) 295-7057") && f.text.includes("(863) 488-6716"), `${lang}: pie con los dos teléfonos`, JSON.stringify(f.tels));
+    ok(f.mail === "mailto:admin@csdgoodservices.com", `${lang}: pie con email`);
+    ok(f.header === "tel:+17862957057", `${lang}: header llama al teléfono principal`);
+    ok(lang === "en" ? /text message/.test(f.consent) && /never marketing/.test(f.consent) && /STOP/.test(f.consent) : /mensaje de texto/.test(f.consent) && /nunca publicidad/.test(f.consent) && /STOP/.test(f.consent), `${lang}: consentimiento con mensajes de texto (solo notificaciones)`);
+    ok(f.ld, `${lang}: JSON-LD LocalBusiness con el teléfono principal`);
+  }
+  ok(!log.errors.length, "sin errores en consola", log.errors.join("\n"));
+  await ctx.close();
+}
+
 console.log("\n7. Palabras prohibidas en el código del sitio");
 {
   const files = [];

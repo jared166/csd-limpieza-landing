@@ -514,8 +514,8 @@ input[type="number"].input::-webkit-inner-spin-button, input[type="number"].inpu
 @media (min-width: 900px) { .footer__grid { grid-template-columns: 1.2fr 1fr auto; align-items: start; gap: 48px; } }
 .footer__name { color: var(--csd-white); font-weight: 600; margin-top: 18px; }
 .dot-list { display: flex; flex-wrap: wrap; gap: 4px 0; }
-.dot-list > * + *::before { content: "·"; margin: 0 10px; color: #5a5a5a; }
-@media (max-width: 639px) { .dot-list { flex-direction: column; gap: 6px; } .dot-list > * + *::before { content: none; } }
+/* Datos de contacto del pie: lista vertical (dirección, teléfonos, email) en todos los tamaños */
+.dot-list { flex-direction: column; gap: 6px; }
 .dot-list a { text-decoration: none; }
 .dot-list a:hover { color: var(--csd-cyan); }
 .footer__links { display: flex; flex-wrap: wrap; gap: 4px 20px; }

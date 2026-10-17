@@ -80,6 +80,7 @@ El botón primario usa **blanco, 19 px mínimo, peso 700, mayúsculas, tracking 
 - Tamaño en pantalla: 120 px en móvil y 132 px en escritorio (el archivo tiene 266 px reales; más grande se vería borroso en pantallas 2×).
 - El encabezado es sólido `#0A0A0A` y mide 68 px en móvil / 84 px en escritorio para que el logo respire (el brief pedía 60 px en móvil; se subió por el logo).
 - Si el archivo no cargara, el `<img>` muestra un texto de respaldo neutro (`.brand__fallback`).
+- Favicon: `favicon-32.png` y `apple-touch-icon.png`, derivados del monograma del logo oficial (no redibujados).
 
 ### Sistema visual
 
@@ -88,6 +89,12 @@ El botón primario usa **blanco, 19 px mínimo, peso 700, mayúsculas, tracking 
 - Tarjetas `#141414` con borde `#262626` y radio 16 px. Íconos SVG inline de línea, 1,75 px, cian. Sin icon fonts ni emojis.
 - Animaciones mínimas: aparición con fade + 8 px; se respeta `prefers-reduced-motion`. **Nada de parallax ni cursores personalizados.**
 - Capa premium vigente (ver `DOCUMENTACION.md`): brillo del hero que sigue al puntero (solo mitad derecha y solo con puntero fino), línea cian que "limpia" la composición abstracta, halo cian en bordes de tarjetas, barra de progreso de 2 px, grano sutil y numeración editorial de secciones. No sumar más efectos sin pedido explícito.
+
+## Datos de la empresa y consentimiento
+
+- Datos cargados en `config.js` (fuente: textos legales del cliente): **CSD Good Services LLC**, 8215 NW 64th Street, Medley, FL 33166, admin@csdgoodservices.com, teléfono principal **(786) 295-7057** (todos los botones de llamada) y secundario (863) 488-6716 (solo en el pie).
+- El consentimiento del formulario incluye mensajes de texto **solo como notificaciones de la solicitud, nunca marketing**, con tarifas y STOP (texto exacto en `DOCUMENTACION.md`, sección 2.6). No convertirlo en consentimiento de marketing sin pedido explícito y revisión legal.
+- Los textos legales (`privacy/`, `terms/`, `es/privacidad/`, `es/terminos/`) son del cliente y se copian literal.
 
 ## Medición (eventos del dataLayer)
 

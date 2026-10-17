@@ -34,6 +34,7 @@ function safeUrl(url) {
 }
 
 const phoneOk = has(CONFIG.phone) && /^\+1\d{10}$/.test(String(CONFIG.phoneE164 || "").trim());
+const phone2Ok = has(CONFIG.phone2) && /^\+1\d{10}$/.test(String(CONFIG.phone2E164 || "").trim());
 
 /* ── Medición y atribución ───────────────────────────────────────────────── */
 safe(loadGtm, "gtm");
@@ -69,6 +70,15 @@ function initContact() {
     const label = el.querySelector("[data-tel-text]");
     if (label) label.textContent = CONFIG.phone;
     if (el.hasAttribute("data-tel-aria")) el.setAttribute("aria-label", `${el.dataset.telAria} ${CONFIG.phone}`);
+    el.hidden = false;
+  });
+
+  // Teléfono secundario: solo en el pie.
+  $$("[data-tel2]").forEach((el) => {
+    if (!phone2Ok) { el.remove(); return; }
+    el.href = "tel:" + CONFIG.phone2E164.trim();
+    const label = el.querySelector("[data-tel-text]");
+    if (label) label.textContent = CONFIG.phone2;
     el.hidden = false;
   });
 
