@@ -7,6 +7,8 @@ Landing de captación para campañas de **Google Ads (búsqueda)** del servicio 
 - Leads → **GoHighLevel** (Inbound Webhook de un workflow), con GCLID/UTM para conversiones offline.
 - Medición → **Google Tag Manager** vía `dataLayer` (solo si hay ID).
 
+**Online:** https://jared166.github.io/csd-limpieza-landing/ (EN) · https://jared166.github.io/csd-limpieza-landing/es/ (ES). Se publica desde `main` con GitHub Pages.
+
 > Documentación completa del trabajo, decisiones y pendientes: [`DOCUMENTACION.md`](DOCUMENTACION.md).
 > Reglas para quien edite el sitio (personas o agentes): [`AGENTS.md`](AGENTS.md).
 
