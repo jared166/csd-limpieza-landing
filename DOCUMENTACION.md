@@ -3,8 +3,16 @@
 **Cliente:** CSD Good Services (pintura y limpieza comercial, Miami, FL)
 **Pieza:** landing de captación para Google Ads (búsqueda), servicio de limpieza comercial puntual o recurrente
 **Idiomas:** inglés (por defecto) y español, cada uno con su URL final
-**Fecha:** octubre de 2026
-**Estado:** construida, verificada y lista para cargar datos reales. No lanzar campañas hasta cerrar el checklist de la sección 9.
+**Última actualización:** 17 de octubre de 2026
+**Estado:** **online** en GitHub Pages, con logo oficial y titulares por grupo de anuncios activos. Falta cargar los datos reales del cliente (`config.js`) y cerrar el checklist de la sección 9 antes de lanzar campañas.
+
+| | |
+| --- | --- |
+| **URL pública (EN)** | https://jared166.github.io/csd-limpieza-landing/ |
+| **URL pública (ES)** | https://jared166.github.io/csd-limpieza-landing/es/ |
+| **Repositorio** | `jared166/csd-limpieza-landing`, rama `main` |
+| **Hosting** | GitHub Pages: *Deploy from a branch*, `main`, carpeta `/ (root)` |
+| **Indexación** | `noindex, follow` (a propósito: es una landing de anuncios) |
 
 ---
 
@@ -19,8 +27,8 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 | Lighthouse móvil · Accesibilidad | **100** (EN y ES) |
 | Lighthouse móvil · Buenas prácticas | **96** (único aviso: Google Fonts bloqueado por el proxy del entorno de pruebas; no es un error del sitio) |
 | Lighthouse móvil · SEO | 54 (esperado: `noindex` activo y `hreflang` relativos hasta tener dominio) |
-| LCP / CLS / TBT (móvil simulado) | 1,6–1,7 s / 0,004 / 0 ms |
-| Peso HTML + CSS + JS por página | 107 KB EN · 108 KB ES (objetivo < 120 KB) |
+| LCP / CLS / TBT (móvil simulado) | 1,6–1,9 s / 0,004 / 0 ms (medido en local, con el logo ya cargado) |
+| Peso HTML + CSS + JS por página | 107,1 KB EN · 107,6 KB ES (objetivo < 120 KB) |
 | Scroll horizontal 320–1440 px | Ninguno |
 
 ---
@@ -69,6 +77,19 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 
   > **Lista blanca del script inline:** `["office","retail","warehouse","restaurant","residential"]` (antes `office`, `janitorial`, `window`, `floor`). Cualquier otra clave muestra el H1 por defecto. Las URLs finales de los anuncios deben usar exactamente estas claves, por ejemplo `https://…/?h=retail`. Si se agrega una variante nueva, hay que sumar el atributo `data-h-<clave>` en los dos HTML **y** la clave en la lista del script de ambos archivos.
 
+  **URLs finales para Google Ads** (una por grupo de anuncios):
+
+  | Grupo de anuncios | URL final |
+  | --- | --- |
+  | Oficinas | `https://jared166.github.io/csd-limpieza-landing/?h=office` |
+  | Tiendas | `https://jared166.github.io/csd-limpieza-landing/?h=retail` |
+  | Almacenes | `https://jared166.github.io/csd-limpieza-landing/?h=warehouse` |
+  | Restaurantes | `https://jared166.github.io/csd-limpieza-landing/?h=restaurant` |
+  | Residencial | `https://jared166.github.io/csd-limpieza-landing/?h=residential` |
+  | Genérico / sin grupo | `https://jared166.github.io/csd-limpieza-landing/` |
+
+  Google Ads agrega el `gclid` solo (con el etiquetado automático activo); no hace falta escribirlo en la URL. Los UTM son opcionales y se pueden sumar con un sufijo de URL final. Si más adelante se usa un dominio propio, hay que cambiar estas URLs.
+
   > **Largo de los titulares:** `restaurant` es el más largo (5 líneas en móvil en inglés y 6 en español); entra sin desbordes y el CTA sigue visible en la primera pantalla del móvil, pero es candidato a una versión más corta si se quiere ganar espacio.
 - **Atribución (`attribution.js`):** captura `gclid`, `gbraid`, `wbraid`, `utm_*` y `h`; guarda primer contacto 90 días; un click ID nuevo reemplaza al anterior; agrega `landing_page` y `referrer`. Si el storage está bloqueado: `sessionStorage` → memoria, sin errores.
 - **Cambio de idioma:** conserva query string y hash; sin redirección automática por idioma del navegador; `hreflang` recíprocos; evento `language_switch`.
@@ -96,7 +117,7 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 - **`config.js` como fuente única** de datos editables.
 - **Robustez:** cada bloque de `main.js` corre dentro de `safe()`; un error no rompe el resto. Las apariciones on-scroll tienen red de seguridad a los 6 s.
 - **Rendimiento:** Inter se carga sin bloquear el render y con una fuente de respaldo con métricas ajustadas (CLS ≈ 0); sin imágenes pesadas; JS diferido (módulos).
-- **Caché:** `?v=AAAAMMDD` en CSS y scripts de entrada; `.htaccess` incluido por si el sitio se mueve a Apache/Hostinger (GitHub Pages lo ignora).
+- **Caché:** `?v=AAAAMMDD` en CSS y scripts de entrada (valor actual: `?v=20261016-2`); `.htaccess` incluido por si el sitio se mueve a Apache/Hostinger (GitHub Pages lo ignora).
 
 ```
 assets/js/
@@ -144,7 +165,7 @@ Refinamientos adicionales: numeración editorial de secciones (01–07, decorati
 - IntersectionObserver con umbral 0,01 + red de seguridad a los 6 s.
 - `overflow-x: clip` en lugar de `hidden` (no rompe `position: sticky` del bloque de cotización).
 - `100svh` para el alto del hero en escritorio.
-- Fallback sólido para `backdrop-filter` en el encabezado.
+- Encabezado sólido `#0A0A0A` (al principio era translúcido con `backdrop-filter` y fallback sólido; se cambió a sólido al cargar el logo oficial, porque el manual pide el logo siempre sobre `#0A0A0A`).
 - Montajes idempotentes (galería, antes/después, halos).
 - Contenido crítico escrito en el HTML; el JS solo enriquece.
 - `?v=` en CSS/JS + `.htaccess` de la skill.
@@ -178,7 +199,7 @@ El verificador de la skill (`verify_project.py`) solo reporta esas desviaciones 
 8. **Mensaje de falla con datos parciales:** si falta teléfono o email, se usa la variante con el dato disponible; si faltan ambos, "Please try again in a few minutes" / "Inténtelo de nuevo en unos minutos".
 9. **Ubicación `hero`** no se usó: el hero no tiene botón de llamada, así que `click_to_call` mantiene exactamente las ubicaciones del brief.
 10. **Venta cruzada sin URL:** el texto informativo se mantiene (es verdadero) y solo se omite el link.
-11. **Dos imágenes Open Graph** (EN y ES), cada una con su H1, generadas por script; incluyen el logo automáticamente cuando exista.
+11. **Dos imágenes Open Graph** (EN y ES), cada una con el logo oficial y su H1 por defecto, generadas con `node tools/og-image.mjs` (si cambia el logo, se vuelve a correr).
 12. **Ícono de "Techos":** se dibujó una lámpara colgando de un techo interior (coherente con el pendiente de confirmar que son techos interiores).
 13. **Selector "Property type"** con opción inicial "—" en lugar de un texto inventado.
 14. **JSON-LD `LocalBusiness`** solo si hay `legalName` y (teléfono o dirección); el horario se publica como texto libre en `openingHours`.
@@ -238,6 +259,8 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 - **"Ceilings / Techos":** confirmar que son techos interiores.
 - **Dominio final:** convertir `hreflang` y `og:image` a URLs absolutas.
 - **GTM:** conversión de Google Ads sobre `generate_lead`, GA4 y Consent Mode.
+- **Titular `residential`:** confirmar con CSD si ofrece limpieza residencial antes de pautar ese grupo. Esos leads disparan `lead_residential`, que no cuenta como conversión de Google Ads.
+- **Titular `restaurant`:** opcional, una versión más corta (hoy ocupa 5 líneas en el celular).
 
 ---
 
@@ -253,11 +276,16 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 - [ ] "Ceilings / Techos" confirmado.
 - [ ] `noindex` revisado.
 - [ ] `node tools/verify.mjs` en 0 fallas con la configuración real.
-- [ ] Prueba final en un celular real con `?gclid=TEST&h=office` en EN y ES.
+- [x] Sitio online en GitHub Pages.
+- [x] Titulares `?h=` alineados con los grupos de anuncios.
+- [ ] Grupo `residential` confirmado con el cliente.
+- [ ] Prueba final en un celular real con `?gclid=TEST&h=office` en EN y ES, sobre la URL pública.
 
 ---
 
 ## 10. Cómo seguir iterando
+
+**Cómo se publica un cambio:** se trabaja en una rama, se abre una pull request contra `main` y, al fusionarla, GitHub Pages publica la nueva versión en uno o dos minutos. Lo que está en `main` es lo que está online.
 
 1. Leer `AGENTS.md` (reglas de contenido, marca y medición).
 2. Cambiar datos solo en `config.js`; cambios de copy solo si los pide Jared y en los dos idiomas a la vez.
@@ -279,4 +307,6 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 | --- | --- | --- |
 | 16-10-2026 | Landing EN/ES completa, medición, formulario, atribución y pase premium | jared166/csd-limpieza-landing#1 |
 | 16-10-2026 | Logo oficial del cliente en las 8 páginas, encabezado sólido de 68/84 px y OG regenerada | jared166/csd-limpieza-landing#2 |
+| 16-10-2026 | Sitio publicado en GitHub Pages (`main`, carpeta raíz) | — |
 | 16-10-2026 | Titulares `?h=` alineados con los tipos de propiedad del formulario (`office`, `retail`, `warehouse`, `restaurant`, `residential`), lista blanca del script actualizada y pruebas a 171/171 | jared166/csd-limpieza-landing#3 |
+| 17-10-2026 | Documentación al día: estado online, URLs públicas y finales por grupo de anuncios, métricas y pendientes actualizados | jared166/csd-limpieza-landing#4 |
