@@ -130,7 +130,7 @@ node tools/og-image.mjs      # regenera og-image(.jpg|-es.jpg); incluye el logo 
 
 - [ ] **Datos legales y de contacto** en `config.js`: `legalName` exacto, `phone`, `phoneE164`, `email`, `address`.
 - [ ] **Horario real** (`hours_en`, `hours_es`).
-- [ ] **Textos legales revisados por abogado** en `privacy/`, `terms/`, `es/privacidad/`, `es/terminos/` (y revisión del texto de consentimiento del formulario).
+- [x] **Textos legales cargados** en `privacy/`, `terms/`, `es/privacidad/`, `es/terminos/` (provistos por el cliente el 17-10-2026). Pendiente: confirmar revisión de abogado y alinear el consentimiento del formulario si se enviarán SMS.
 - [ ] **Webhook probado de punta a punta en GoHighLevel** (incluye `gclid`, etiqueta puntual/recurrente y email de confirmación al lead).
 - [ ] **GTM** con la conversión de Google Ads configurada sobre `generate_lead` (conversiones mejoradas con `user_data`).
 - [ ] **Fotos reales** cargadas (o la galería sigue oculta).

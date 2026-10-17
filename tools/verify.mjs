@@ -338,7 +338,11 @@ console.log("\n7. Palabras prohibidas en el código del sitio");
   const banned = ["free", "gratis", "cheap", "affordable", "barato", "guarantee", "garantía", "licensed", "insured", "on time", "best", "#1", "eco-friendly", "green", "hospital-grade", "bodega", "presupuesto", "tú", "vos"];
   // Excepción documentada: config.js define los nombres de campo del bloque opcional `guarantee`
   // (guaranteeText_en/_es) que pide el brief; no es texto visible.
-  const allowed = (f, w, line) => w === "guarantee" && /guarantee(Text_|:\s*false|\b.*=== true)|blocks\.guarantee/.test(line);
+  // Excepción 2: los textos legales provistos por el cliente usan "guarantee" y "error-free" como
+  // descargos ("we cannot guarantee…", "we do not guarantee… error-free"), no como promesas de venta.
+  const LEGAL = /(privacy|terms|privacidad|terminos)\/index\.html$/;
+  const allowed = (f, w, line) => (w === "guarantee" && /guarantee(Text_|:\s*false|\b.*=== true)|blocks\.guarantee/.test(line))
+    || (LEGAL.test(f) && ((w === "guarantee" && /(cannot|do not) guarantee/i.test(line)) || (w === "free" && /error-free/i.test(line))));
   const hits = [];
   for (const f of files) {
     const lines = readFileSync(f, "utf8").split("\n");

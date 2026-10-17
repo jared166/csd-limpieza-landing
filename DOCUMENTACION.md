@@ -42,8 +42,8 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 | `/` | EN | Landing completa |
 | `/es/` | ES | Landing completa |
 | `/thank-you/` · `/es/gracias/` | EN · ES | Confirmación, botón de llamada (si hay teléfono) y venta cruzada a pintura |
-| `/privacy/` · `/es/privacidad/` | EN · ES | Placeholder legal ("This page is being updated.") |
-| `/terms/` · `/es/terminos/` | EN · ES | Placeholder legal |
+| `/privacy/` · `/es/privacidad/` | EN · ES | Política de privacidad provista por el cliente (vigencia 17-10-2026), ver sección 2.4 |
+| `/terms/` · `/es/terminos/` | EN · ES | Términos del servicio provistos por el cliente (vigencia 17-10-2026), ver sección 2.4 |
 
 ### 2.2 Secciones de la landing (en orden)
 
@@ -107,6 +107,29 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 - **Medición (`tracking.js`):** GTM solo si hay ID; `dataLayer` siempre inicializado; eventos `form_start`, `generate_lead` (con `user_data` para conversiones mejoradas), `lead_residential`, `click_to_call`, `language_switch`.
 - **Degradación elegante:** todo lo que depende de `config.js` está oculto en el HTML y se revela solo con dato real. Sin teléfono no existe ningún `tel:`; sin galería, no existe la sección; nunca aparece "undefined", "null" ni "[PENDIENTE]".
 
+### 2.4 Textos legales (privacidad y términos)
+
+El 17-10-2026 el cliente entregó los textos de **Privacy Policy** y **Terms of Service** en inglés y español. Se cargaron **literales** en las 4 páginas legales; solo se convirtió el formato Markdown a HTML.
+
+| Página | Contenido |
+| --- | --- |
+| `privacy/` (EN) | Privacy Policy: 7 secciones (introducción, datos que se recopilan, uso, con quién se comparten, seguridad, derechos, contacto) |
+| `es/privacidad/` (ES) | Política de Privacidad: las mismas 7 secciones |
+| `terms/` (EN) | Terms of Service: 8 secciones (aceptación, propósito, cotizaciones, conducta, propiedad intelectual, responsabilidad, ley aplicable, contacto) |
+| `es/terminos/` (ES) | Términos de Servicio: las mismas 8 secciones |
+
+- **Formato:** fecha de vigencia, empresa y sitio en un recuadro arriba; secciones numeradas como títulos; listas con viñeta cian; el email es un link `mailto:`. Los teléfonos quedan como texto, para no sumar `tel:` sin medición fuera de las ubicaciones del brief.
+- **Títulos de página (H1):** se mantienen los del brief, "Privacy Policy", "Terms of Service", "Política de privacidad" y "Términos del servicio", para que coincidan con los links del pie. El documento del cliente usa mayúsculas distintas ("Política de Privacidad", "Términos de Servicio"); el texto interno se dejó tal cual.
+- **Pruebas:** los textos legales usan "guarantee" y "error-free" como descargo ("we cannot guarantee…", "we do not guarantee… error-free"). `tools/verify.mjs` los acepta **solo** en las páginas legales y solo en esa forma negativa; en el resto del sitio siguen prohibidos.
+- **Comentario en el HTML:** "Texto legal provisto por el cliente (17-10-2026). Se copia literal; no editar sin pedido de CSD."
+
+**Observaciones para revisar con el cliente o su abogado** (no se cambió nada; son señales):
+
+1. **Mensajes de texto (SMS):** la política dice que se contactará al usuario "via phone, text, or email" y que puede responder "STOP". El aviso de consentimiento del formulario solo menciona teléfono y email. Si van a enviar SMS, conviene que el consentimiento lo mencione (requisito habitual de la TCPA en EE. UU.). Cambiar ese texto requiere pedido explícito, en los dos idiomas.
+2. **Google Analytics:** la política menciona Google Analytics. Hoy no está cargado; se configura en GTM cuando haya `gtmId`.
+3. **URL del sitio:** la política cita `https://jared166.github.io/csd-limpieza-landing/`. Si se pasa a dominio propio, hay que actualizarla.
+4. **Datos de contacto:** los textos confirman nombre legal (**CSD Good Services LLC**), email (`admin@csdgoodservices.com`), dos teléfonos (+1 (786) 295-7057 y +1 (863) 488-6716) y dirección (8215 NW 64th Street, Medley, FL 33166). Todavía **no** se cargaron en `config.js`: falta definir cuál teléfono es el principal para los botones de llamada y el horario de atención.
+
 ---
 
 ## 3. Arquitectura técnica
@@ -117,7 +140,7 @@ Se construyó una landing estática bilingüe, rápida y medible, pensada para c
 - **`config.js` como fuente única** de datos editables.
 - **Robustez:** cada bloque de `main.js` corre dentro de `safe()`; un error no rompe el resto. Las apariciones on-scroll tienen red de seguridad a los 6 s.
 - **Rendimiento:** Inter se carga sin bloquear el render y con una fuente de respaldo con métricas ajustadas (CLS ≈ 0); sin imágenes pesadas; JS diferido (módulos).
-- **Caché:** `?v=AAAAMMDD` en CSS y scripts de entrada (valor actual: `?v=20261016-2`); `.htaccess` incluido por si el sitio se mueve a Apache/Hostinger (GitHub Pages lo ignora).
+- **Caché:** `?v=AAAAMMDD` en CSS y scripts de entrada (valor actual: `?v=20261017`); `.htaccess` incluido por si el sitio se mueve a Apache/Hostinger (GitHub Pages lo ignora).
 
 ```
 assets/js/
@@ -225,7 +248,7 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 | 12.5 Titulares | Variantes `office`, `retail`, `warehouse`, `restaurant` y `residential` × 2 idiomas (ver la tabla de la sección 2.3); `<script>`, claves desconocidas, `constructor` y `__proto__` → H1 por defecto |
 | 12.6 Config vacía | Sin `tel:`, sin galería, sin frecuencias, sin scripts de Google, 4 pasos; sin "[PENDIENTE]/undefined/null" |
 | 12.6b Config completa | Teléfonos, galería + lightbox (Escape devuelve el foco), 5 pasos, GTM, JSON-LD, venta cruzada |
-| 12.7 Palabras prohibidas | Ninguna en HTML/CSS/JS (los nombres de campo `guarantee*` de `config.js` son la única excepción, pedida por el brief) |
+| 12.7 Palabras prohibidas | Ninguna en HTML/CSS/JS. Excepciones documentadas: los nombres de campo `guarantee*` de `config.js` (pedidos por el brief) y los descargos "cannot/do not guarantee" y "error-free" de los textos legales del cliente |
 | 12.8 Contraste | Sin blanco sobre magenta < 19 px/700 ni texto violeta, en 8 páginas × 2 anchos |
 | 12.9 Lighthouse móvil | 99 / 100 / 96 / 54 (SEO bajo por `noindex`, esperado) |
 | Extras | Texto ≥ 14 px, áreas táctiles ≥ 44 px, sin scroll horizontal de 320 a 1440 px, peso < 120 KB |
@@ -238,9 +261,9 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 
 | Campo | Qué falta |
 | --- | --- |
-| `legalName` | Nombre legal exacto ("CSD Good Services, LLC", "CSD Good Service LLC" o "CSD Good Services LLC") |
-| `phone`, `phoneE164` | Teléfono en (305) 555-0123 y +13055550123 |
-| `email`, `address` | Email y dirección |
+| `legalName` | Confirmado en los textos legales: **CSD Good Services LLC** (falta cargarlo) |
+| `phone`, `phoneE164` | Hay dos números en los textos legales, +1 (786) 295-7057 y +1 (863) 488-6716: falta definir cuál va en los botones de llamada |
+| `email`, `address` | Confirmados en los textos legales: `admin@csdgoodservices.com` y 8215 NW 64th Street, Medley, FL 33166 (falta cargarlos) |
 | `hours_en`, `hours_es` | Horario real de atención |
 | `webhookUrl` | Inbound Webhook del workflow de GoHighLevel (y definir `webhookMode` tras la prueba de CORS) |
 | `gtmId` | Contenedor GTM |
@@ -253,8 +276,8 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 
 - ~~Logo oficial~~ → cargado (`assets/img/logo-csd.png`). Opcional: pedir SVG o PNG de mayor resolución.
 - **Isotipo** para reemplazar el favicon provisorio.
-- **Textos legales** (privacidad y términos, EN/ES) revisados por abogado. No lanzar campañas sin esto.
-- **Consentimiento del formulario:** revisión legal; si piden casilla obligatoria, se agrega.
+- ~~Textos legales~~ → cargados el 17-10-2026 (provistos por el cliente). Pendiente: confirmar que los revisó un abogado y las observaciones de la sección 2.4.
+- **Consentimiento del formulario:** revisión legal; si piden casilla obligatoria, se agrega. Si se enviarán SMS, sumar "text" / "mensajes de texto" (ver sección 2.4).
 - **Email de confirmación:** la página de gracias dice que se envió; el workflow de GHL debe enviarlo.
 - **"Ceilings / Techos":** confirmar que son techos interiores.
 - **Dominio final:** convertir `hreflang` y `og:image` a URLs absolutas.
@@ -268,7 +291,8 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 
 - [ ] Datos legales y de contacto cargados.
 - [ ] Horario real.
-- [ ] Textos legales revisados.
+- [x] Textos legales cargados (privacidad y términos, EN/ES).
+- [ ] Revisión de abogado confirmada y consentimiento alineado con el envío de SMS.
 - [ ] Webhook probado de punta a punta en GoHighLevel (gclid, etiqueta puntual/recurrente, email de confirmación).
 - [ ] GTM publicado con la conversión sobre `generate_lead` (y conversiones mejoradas).
 - [ ] Fotos reales cargadas (o galería oculta, que es válido).
@@ -310,3 +334,4 @@ Script: `node tools/verify.mjs` (Playwright, Chromium headless, sitio servido ba
 | 16-10-2026 | Sitio publicado en GitHub Pages (`main`, carpeta raíz) | — |
 | 16-10-2026 | Titulares `?h=` alineados con los tipos de propiedad del formulario (`office`, `retail`, `warehouse`, `restaurant`, `residential`), lista blanca del script actualizada y pruebas a 171/171 | jared166/csd-limpieza-landing#3 |
 | 17-10-2026 | Documentación al día: estado online, URLs públicas y finales por grupo de anuncios, métricas y pendientes actualizados | jared166/csd-limpieza-landing#4 |
+| 17-10-2026 | Textos legales del cliente (Privacy Policy y Terms of Service, EN/ES) cargados en las 4 páginas legales, con estilos de lectura y observaciones registradas | jared166/csd-limpieza-landing#5 |
